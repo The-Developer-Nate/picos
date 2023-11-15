@@ -8,7 +8,6 @@
   <meta name="keywords" content="random games lol">
   <meta name="author" content="TheDevNate">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="stennerela.jpg">
   <style>
 h1 {
 	font-family: Arial;
@@ -104,12 +103,6 @@ div.cookieContainer {
 </head>
 <body>
 
-<div class="cookieAskBg" id="cookieContainer" style="display:none"><div class="cookieContainer">
-    <center><h1><a href="#" style="text-decoration:none;font-size: 50x;" onclick="acceptCookies()">
-    🍪✅
-    <span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="#" style="text-decoration:none;font-size: 50x;" onclick="denyCookies()">🍪❌</a></span></a></h1>
-</div></div>
-
 <img src="stennerela.jpg"></img>
 <br><br><br><br><br><br>
 <hr>
@@ -128,141 +121,6 @@ div.cookieContainer {
 
 </div>
 <div id="container"></div>
-
-<script>
-var likes;
-var is_clicked = false;
-var el_alpha = document.getElementById("sort_alphabet");
-var el_time  = document.getElementById("sort_time");
-var el_likes = document.getElementById("sort_likes");
-var downarrow= document.getElementById("downarrow");
-function clicksort_any(el) {
-	el_alpha.setAttribute('style', '');
-    el_time.setAttribute('style', '');
-    el_likes.setAttribute('style', '');
-    el.setAttribute('style', "border: 3px solid green;");
-}
-function clicksort_time(el) {
-	clicksort_any(el);
-    sort_games_time();
-    clickDownArrow(downarrow);
-}
-function clicksort_alphabet(el) {
-	clicksort_any(el);
-    sort_games_alphabet();
-    clickDownArrow(downarrow);
-}
-function clicksort_likes(el) {
-	clicksort_any(el);
-    sort_games_likes();
-    clickDownArrow(downarrow);
-}
-function clickDownArrow(el) {
-	let sort = document.getElementById("sort-container");
-	is_clicked = !is_clicked;
-    if (!is_clicked) {
-    	el.style.transform = 'translate(1050%) rotate(180deg)';
-        sort.style.display = 'none';
-    } else {
-    	el.style.transform = 'translate(1050%)';
-        sort.style.display = 'block';
-    }
-}
-</script>
-
-<script>
-function setCookie(cname, cvalue, exdays) {
-  const d = new Date();
-  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-  let expires = "expires="+d.toUTCString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
-
-function getCookie(cname) {
-  let name = cname + "=";
-  let ca = document.cookie.split(';');
-  for(let i = 0; i < ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
-}
-
-if (getCookie("likes")==="") {
-	setCookie("likes", '[]', 365);
-}
-if (getCookie("lastSorting")==="") {
-	setCookie("lastSorting", "alphabet", 365);
-}
-
-function getAllLikes(cb) {
-	let url = 'https://stenunblockedserver.stensjogren.repl.co/like?game=all';
-    const xml = new XMLHttpRequest();
-    xml.open("GET", url, true);
-
-    xml.send(null);
-    xml.addEventListener("load", function() {
-    
-    if (xml.status === 200) {
-    	cb(JSON.parse(xml.responseText));
-    } else {
-    	cb(null);
-    }});
-}
-function getLikes(game, cb) {
-	let url = 'https://stenunblockedserver.stensjogren.repl.co/like?game=' + encodeURIComponent(game);
-    const xml = new XMLHttpRequest();
-    xml.open("GET", url, true);
-
-    xml.send(null);
-    xml.addEventListener("load", function() {
-    if (xml.status === 200) {
-    	cb( JSON.parse(xml.responseText)['likes'] );
-    } else {
-    	cb( "Error: " + xml.responseText );
-    }
-    });
-}
-function likez(game, cb) {
-	let js = JSON.parse(getCookie("likes"));
-    
-	if (js.includes(game)) {
-    	getLikes(game, function(lika) {
-        	likes[game] = lika;
-    		cb(likes[game] + '👍');
-        });
-        return;
-    }
-	
-    let url = 'https://stenunblockedserver.stensjogren.repl.co/like?game=' + encodeURIComponent(game);
-    const xml = new XMLHttpRequest();
-    xml.open("POST", url, true);
-    xml.send(null);
-    xml.addEventListener("load", function() {
-    if (xml.status === 200) {
-    	js.push(game);
-        setCookie("likes", JSON.stringify(js));
-        getLikes(game, function(likess) {
-        	likes[game] = likess;
-    		cb( likes[game] + '👍' );
-        });
-        return;
-    }
-    cb( "Error: " + xml.responseText );
-    });
-}
-
-function likezElement(game, element) {
-	likez(game, function(lstr) {
-    	element.innerText = lstr;
-    });
-}
-</script>
 
 <script>
 var games = [
